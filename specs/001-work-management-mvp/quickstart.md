@@ -105,18 +105,18 @@ Work through each scenario in order. Each maps to a user story in the spec.
    - Title: `Review EDA API specification`
    - Description: `Check against latest requirements document`
    - Priority: High
-   - Project: EDA
-   - Category: Document Review
-   - Tags: Azure, Documentation
-   - Due date: 5 days from today
-   - Reminder: 1 day before due date
-3. **Expected**: Work item appears in Inbox view immediately.
+   - Status: Open
+3. **Expected**: Work item appears in the work item list immediately.
 4. Edit the work item — change Priority to Critical.
-5. **Expected**: Priority updates and the change appears in history (EventType: PriorityChanged).
+5. **Expected**: Priority updates in the list and detail panel.
 6. Mark the work item as completed.
-7. **Expected**: `CompletedAt` is set; item disappears from Inbox; appears in Completed Today view.
+7. **Expected**: Status shows Done and `CompletedAt` is set.
+8. Delete the work item (confirm the prompt).
+9. **Expected**: The work item no longer appears in the list.
 
-**Validates**: FR-001, FR-002, FR-003, FR-004, FR-037, FR-038, SC-001
+> **Scope (I5)**: S1 covers only what US1 builds. Project, category and tags are covered in S2 (US2), due date and reminder in S3 (US3), the PriorityChanged history entry in S9 (US7), and Inbox / Completed Today views in S6–S7 (US5–US6). The full-field flow from spec US1-AS1 is verified end-to-end by the W01–W18 checklist.
+
+**Validates**: FR-001, FR-002 (US1 fields), FR-003, FR-004. FR-037, FR-038 and SC-001 are verified once US2, US3 and US7 are in place (S9, W01–W18).
 
 ---
 

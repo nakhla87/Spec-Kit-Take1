@@ -93,6 +93,7 @@ Creates a new work item.
 - `title` required, non-empty, max 200 chars
 - `statusId` required; must reference an active status
 - All other FK fields optional; if provided, must reference an active (non-archived) record
+- `statusId` must not be the `Snoozed` or `Postponed` system status — use `/snooze` or `/postpone`
 - `dueTime` only accepted when `dueDate` is also provided
 - `reminderAt` must not be in the past
 
@@ -130,6 +131,9 @@ Full update of a work item.
 - If `statusId` changes away from the `Done` system status: `completedAt` is cleared.
 - Statuses are always identified by `systemKey`, never by name (FR-012a).
 - Each significant field change produces an `ActivityRecord`.
+- Lookup validation applies only to lookups that change: an item may keep an already-assigned archived project, category or tag (FR-017), but a newly assigned one must be active.
+- Changing `statusId` to the `Snoozed` or `Postponed` system status returns 400; use `/snooze` or `/postpone`.
+- If `reminderAt` changes, `reminderAcknowledgedAt` is cleared so the reminder fires at the new time. A new `reminderAt` must not be in the past.
 
 **Response 200**: Updated work item
 **Response 400**: Validation error

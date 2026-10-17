@@ -1,7 +1,7 @@
 # Analysis Findings Register: Personal Work Management Application — MVP
 
 **Feature**: `001-work-management-mvp`
-**Source**: `/speckit-analyze` runs on 2026-10-03 and 2026-10-05; S1, U3, D2 resolved 2026-10-17
+**Source**: `/speckit-analyze` runs on 2026-10-03 and 2026-10-05; S1, U3, D2, G1–G4, I5 resolved 2026-10-17
 **Purpose**: Track open findings across spec.md, plan.md, tasks.md, data-model.md, contracts/, and quickstart.md so they can be resolved at the right point during implementation.
 
 Finding IDs match the analysis reports and stay the same across runs. When a finding is resolved, set **Status** to `Resolved`, fill in **Resolution**, and move it to the Resolved section.
@@ -14,7 +14,7 @@ Finding IDs match the analysis reports and stay the same across runs. When a fin
 |----------|------|----------|
 | CRITICAL | 0 | 2 |
 | HIGH | 0 | 5 |
-| MEDIUM | 12 | 1 |
+| MEDIUM | 7 | 6 |
 | LOW | 5 | 2 |
 
 ## When to resolve
@@ -23,7 +23,6 @@ Each open finding has a **Resolve before** gate: the implementation phase (from 
 
 | Gate | Findings |
 |------|----------|
-| Before Phase 3 (US1) | G1, G2, G3, G4, I5 |
 | Before Phase 5 (US3) | I7, U4 |
 | Before Phase 6 (US4) | I6 |
 | Before Phase 7 (US5) | I3, I4, I9 |
@@ -38,11 +37,6 @@ Each open finding has a **Resolve before** gate: the implementation phase (from 
 
 | ID | Category | Location(s) | Finding | Recommendation | Resolve before | Decision needed? | Status |
 |----|----------|-------------|---------|----------------|----------------|------------------|--------|
-| G3 | Coverage | FR-027/028, SC-006; T054, T060, T061 | (a) Polling every 60s with a 2-minute lookback can return an unacknowledged reminder twice; no client-side dedup is specified. (b) Changing `ReminderAt` never clears `ReminderAcknowledgedAt`, so a rescheduled reminder never fires. | Client shows each (itemId, reminderAt) pair once (T061). T026 clears `ReminderAcknowledgedAt` when `ReminderAt` changes. Add both cases to T100. | Phase 3 | No | Open |
-| G4 | Coverage | T026, T032; data-model State Transitions | A plain PUT can set status to Snoozed or Postponed without SnoozeUntil or a new due date, bypassing the snooze/postpone flows. | PUT returns 400 for a change to the Snoozed/Postponed system status and points to `/snooze` or `/postpone`. Exclude those statuses from the WorkItemForm status selector. | Phase 3 | No | Open |
-| G1 | Coverage | FR-017; T026, T027 vs T099 | T099 tests that archived/deactivated lookups are rejected, but no task implements that check (T027 mentions only DataAnnotations). | Add to T026: every referenced lookup must be active or non-archived, otherwise 400. | Phase 3 | No | Open |
-| G2 | Coverage | Edge case (past reminder); api-work-items.md validation; T056 | The contract requires the server to reject a past `reminderAt`, but only the frontend (T056) validates it. | Add server-side validation to T026/T027; cover it in T098. | Phase 3 | No | Open |
-| I5 | Inconsistency | T032 vs dependency table (US1 = "Phase 2 only") | The US1 form needs project/category/tag selectors that come from US2 hooks (T048), and due date only arrives in US3 (T056). The US1 independent test ("create with all fields") can't pass within US1. | Option A: add read-only lookup GET hooks and the due-date field to US1. Option B: narrow the US1 independent test to title/description/priority/status. | Phase 3 | **Yes** | Open |
 | I7 | Inconsistency | T052, T053 | Both are marked [P] but edit the same file, `WorkItemService.cs`, which breaks the [P] definition. | Remove [P] from T053 (runs after T052). | Phase 5 | No | Open |
 | I6 | Inconsistency | FR-030 ("tags") vs api-work-items.md / T062 `tagId` | Filtering supports only a single tag. | Option A: accept `tagIds[]` (match any or all). Option B: state single-tag filtering in FR-030. | Phase 6 | **Yes** | Open |
 | I3 | Inconsistency | spec US3-AS5 vs US5-AS1; api-views.md (Inbox); quickstart S4 step 3 | Snoozed items must be hidden from active views, but Inbox is "Status ≠ Done, ≠ Cancelled", which includes Snoozed. Quickstart S4 already expects them gone from Inbox. | Exclude Snoozed from Inbox in US5-AS1, api-views.md, and T070. | Phase 7 | No | Open |
@@ -65,7 +59,7 @@ Each open finding has a **Resolve before** gate: the implementation phase (from 
 
 ## Resolved Findings
 
-C1–I2 were resolved on 2026-10-05 by editing spec.md, plan.md, tasks.md, data-model.md, contracts/, and quickstart.md, and confirmed by the second `/speckit-analyze` run. U3, S1 and D2 were resolved on 2026-10-17 and have not yet been re-checked by `/speckit-analyze`.
+C1–I2 were resolved on 2026-10-05 by editing spec.md, plan.md, tasks.md, data-model.md, contracts/, and quickstart.md, and confirmed by the second `/speckit-analyze` run. U3, S1, D2, G1–G4 and I5 were resolved on 2026-10-17 and have not yet been re-checked by `/speckit-analyze`.
 
 | ID | Severity | Finding | Resolution |
 |----|----------|---------|------------|
@@ -79,6 +73,11 @@ C1–I2 were resolved on 2026-10-05 by editing spec.md, plan.md, tasks.md, data-
 | U3 | MEDIUM | `IX_WorkItem_PriorityId (PriorityId, Priority.SortOrder)` couldn't be built: SQL Server indexes can't include another table's column. | Resolved 2026-10-17: data-model.md now lists `IX_WorkItem_PriorityId (PriorityId)` and `IX_Priority_SortOrder (Priority.SortOrder)`; both are in T019. |
 | S1 | LOW | Spec status was still "Draft". | Resolved 2026-10-17: spec.md status set to `Approved`. |
 | D2 | LOW | The ReminderAt index appeared in both T019 and T092. | Resolved 2026-10-17: T092 removed; all its indexes (PriorityId, Priority.SortOrder, ReminderAt + ReminderAcknowledgedAt composite) are in T019. |
+| G1 | MEDIUM | No task implemented the check that archived/deactivated lookups are rejected (tested by T099). | Resolved 2026-10-17: T026 validates referenced lookups (on update only changed ones, so an item keeps an archived value per FR-017); T027 maps failures to 400; contract PUT updated. |
+| G2 | MEDIUM | A past `reminderAt` was rejected only in the frontend. | Resolved 2026-10-17: server-side check in T026/T027; covered in T098. |
+| G3 | MEDIUM | Reminder polling could show duplicates; changing `ReminderAt` never cleared `ReminderAcknowledgedAt`. | Resolved 2026-10-17: T061 shows each (workItemId, reminderAt) once per session; T026 clears the acknowledgement on change; contract PUT and T100 updated. |
+| G4 | MEDIUM | A plain PUT could set Snoozed/Postponed and bypass the snooze/postpone flows. | Resolved 2026-10-17: PUT returns 400 for those system statuses (T026, T027, contract); WorkItemForm excludes them (T032); covered in T098. |
+| I5 | MEDIUM | US1's independent test ("create with all fields") needed US2 selectors and the US3 due date. | Resolved 2026-10-17 (Option B, recorded in spec Clarifications): US1's test covers title, description, priority and status; T051 adds the project/category/tag selectors and T056 the due date; quickstart S1 narrowed. |
 
 ---
 
