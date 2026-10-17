@@ -24,6 +24,10 @@
 - Q: Since statuses are user-editable, how does built-in behaviour (completion, snooze, postpone, views) identify the statuses it depends on? → A: The six default statuses are system statuses with a fixed system role; users may rename and reorder them but not deactivate them. Logic keys off the system role, never the display name.
 - Q: Which lookup types support user-defined ordering? → A: All five (priorities, statuses, projects, categories, tags), per Constitution Principle V.
 
+### Session 2026-10-17
+
+- Q: User Story 1's form needs project/category/tag selectors (built in US2) and due date (built in US3). What must US1 deliver on its own? → A: US1's independent test covers title, description, priority and status only. Project, category and tags are added to the form in US2 and due date/reminder in US3. The US1 acceptance scenarios describe the finished MVP and are verified through the W01–W18 workflows.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Create and Manage Work Items (Priority: P1)
