@@ -1,50 +1,123 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+## Sync Impact Report
+
+**Version change**: (none — initial creation) → 1.0.0
+**Bump rationale**: MINOR — initial constitution created from product principles defined in FancyTodoList_Requirements.md.
+
+### Added sections
+- Core Principles (7 principles derived from product requirements)
+- MVP Scope Constraints
+- Development Workflow
+- Governance
+
+### Modified principles
+- None (initial creation)
+
+### Removed sections
+- None (initial creation)
+
+### Deferred TODOs
+- None. All placeholders resolved.
+-->
+
+# Work Management Application Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Simple Core Workflow
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+Creating and updating a work item MUST be fast and require minimal steps.
+The primary interaction path — create, update, complete — MUST remain frictionless at all times.
+Any feature addition MUST NOT introduce steps or screens that slow down this core loop.
+User-interface complexity MUST be justified by concrete user value, not technical convenience.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### II. Strong Organization
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+Projects, Categories, Tags, Priorities, and Statuses MUST serve distinct, non-overlapping purposes.
+Each classification dimension MUST have a clear definition so users can apply them consistently.
+Features MUST NOT blur the boundaries between these organizational concepts.
+New organizational concepts MUST be evaluated against existing ones to avoid duplication.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### III. Clear Deadlines
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+Overdue work and approaching deadlines MUST be immediately visible without user action.
+The application MUST distinguish upcoming, due-today, overdue, and completed work at a glance.
+Overdue items MUST remain identifiable until the user explicitly resolves them
+(completes, cancels, postpones, or otherwise changes their state).
+No feature MUST silently hide or suppress deadline visibility.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### IV. User Control
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+The user MUST remain in control of all changes to important work data.
+Future AI or automation features MUST present suggestions for review and confirmation
+before making changes — automatic silent modification of work items is prohibited.
+This principle MUST be applied to all Phase 3 and Phase 4 capabilities when they are introduced.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### V. Configurable
+
+Lookup values — priorities, statuses, projects, categories, and tags — MUST NOT be hard-coded.
+The system MUST allow users to add, edit, reorder, and archive these values through
+the application's configuration area.
+Configuration changes MUST take effect immediately and be reflected throughout the application.
+
+### VI. Extensible
+
+The MVP architecture MUST support future workflow, AI, and integration features
+without requiring a fundamental rewrite.
+Design decisions in the MVP MUST favor clean extension points over short-term convenience.
+However, extensibility MUST NOT introduce accidental complexity into the MVP itself —
+every extension point MUST justify its added complexity against a concrete future use case
+identified in the requirements.
+
+### VII. Incremental Development
+
+The MVP MUST be fully implemented, validated, and tested before any Phase 2, 3, or 4
+features are introduced.
+Each development increment MUST deliver a working, testable slice of functionality
+that can be demonstrated independently.
+Scope expansion MUST NOT occur mid-increment without explicit review against this constitution.
+
+## MVP Scope Constraints
+
+The following features are **explicitly out of scope** for the MVP and MUST NOT be implemented
+until the MVP is complete and the scope is deliberately expanded:
+
+- AI functionality of any kind (task creation, decomposition, daily planning, summarization)
+- Recurring tasks
+- Task dependencies or blocked-by relationships
+- Complex Waiting-For or advanced follow-up workflows
+- Custom dashboards or custom saved views
+- External integrations (email, calendar, Slack, Microsoft Teams, MCP, Claude Code)
+- Multi-user collaboration, teams, or role-based permissions
+- Advanced analytics or advanced reporting
+- Mobile applications
+
+Any pressure to include out-of-scope features in the MVP MUST be documented as a proposed
+amendment and reviewed against Principle VII (Incremental Development) before acceptance.
+
+## Development Workflow
+
+- All new features MUST begin with a specification (`/speckit-specify`) before any planning
+  or implementation work begins.
+- Implementation planning (`/speckit-plan`) MUST reference the approved specification.
+- Tasks (`/speckit-tasks`) MUST be derived from the plan, not created ad hoc.
+- Each task MUST map to one or more functional requirements or success criteria defined
+  in the specification.
+- Changes to scope during implementation MUST be reflected back into the specification
+  before continuing.
+- The MVP is considered complete when all 18 success criteria workflows listed in
+  `specs/001-work-management-mvp/spec.md` are reliable, intuitive, and tested.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+- This constitution supersedes all informal decisions, preferences, or conventions
+  not captured in a ratified amendment.
+- Amendments MUST be documented with: the principle or section being changed, the
+  motivation, and the version increment (MAJOR/MINOR/PATCH per semantic versioning).
+- MAJOR amendments (removals or redefinitions of core principles) require explicit
+  justification of why the previous principle no longer applies.
+- All specification, planning, and implementation reviews MUST verify compliance
+  with the principles in this constitution.
+- Complexity introduced in any artifact MUST be justified against the principle it serves.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-09-29 | **Last Amended**: 2026-09-29
