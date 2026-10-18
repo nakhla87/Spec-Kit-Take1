@@ -1,6 +1,6 @@
 # API Contract: Work Items
 
-**Base URL**: `http://localhost:5000/api/work-items`
+**Base URL**: `http://localhost:5080/api/work-items`
 **Content-Type**: `application/json`
 
 ---

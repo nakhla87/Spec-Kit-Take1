@@ -10,8 +10,8 @@ This guide describes how to set up and run the application and validates that th
 
 | Requirement | Version | Notes |
 |-------------|---------|-------|
-| .NET SDK | 9.0+ | `dotnet --version` to verify |
-| Node.js | 20 LTS+ | `node --version` to verify |
+| .NET SDK | 10.0+ | `dotnet --version` to verify (pinned by `backend/global.json`) |
+| Node.js | 20.19+ or 22.12+ | `node --version` to verify (required by Vite 8) |
 | SQL Server | 2019+ (local) | Windows: SQL Server Express or Developer Edition |
 | Git | Any | For branch management |
 
@@ -22,6 +22,7 @@ This guide describes how to set up and run the application and validates that th
 1. **Restore and build**:
    ```
    cd backend
+   dotnet tool restore   # installs the pinned dotnet-ef local tool
    dotnet restore
    dotnet build
    ```
@@ -43,11 +44,11 @@ This guide describes how to set up and run the application and validates that th
    ```
    dotnet run --project src/WorkManager.Api
    ```
-   API is available at `http://localhost:5000`.
+   API is available at `http://localhost:5080`.
 
 5. **Verify API health**:
    ```
-   GET http://localhost:5000/api/priorities
+   GET http://localhost:5080/api/priorities
    ```
    Expected: 200 OK with the 6 seeded priority records.
 
@@ -61,9 +62,9 @@ This guide describes how to set up and run the application and validates that th
    npm install
    ```
 
-2. **Configure API base URL** (if not defaulting to `http://localhost:5000`):
+2. **Configure API base URL** (if not defaulting to `http://localhost:5080`):
    - Copy `.env.example` to `.env.local`
-   - Set `VITE_API_BASE_URL=http://localhost:5000`
+   - Set `VITE_API_BASE_URL=http://localhost:5080`
 
 3. **Start the dev server**:
    ```

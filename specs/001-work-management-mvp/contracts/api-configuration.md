@@ -1,6 +1,6 @@
 # API Contract: Configuration
 
-**Base URL**: `http://localhost:5000/api`
+**Base URL**: `http://localhost:5080/api`
 **Content-Type**: `application/json`
 
 All configuration endpoints follow the same pattern. Active (non-archived/non-deactivated) records are returned by default. Pass `?includeInactive=true` to include archived or deactivated records.
