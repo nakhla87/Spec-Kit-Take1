@@ -1,0 +1,6 @@
+@WorkManager.Api_HostAddress = http://localhost:5080
+
+GET {{WorkManager.Api_HostAddress}}/api/priorities
+Accept: application/json
+
+###

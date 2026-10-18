@@ -8,11 +8,13 @@ All technical context was fully resolved from the spec and clarification session
 
 ## Decision 1: .NET Version
 
-**Decision**: .NET 9 (LTS successor, current stable as of late 2025)
+**Decision**: .NET 10 LTS (revised 2026-10-17; originally .NET 9)
 
-**Rationale**: .NET 9 is the current stable release with long-term support. ASP.NET Core 9 and EF Core 9 are compatible and mature. No breaking changes affect the MVP feature set.
+**Rationale**: .NET 10 is the current long-term-support release (supported until November 2028). .NET 9 is a standard-term release that reaches end of support on 2026-11-10, so it was replaced before implementation started. ASP.NET Core 10 and EF Core 10 are compatible and mature. The SDK is pinned in `backend/global.json`.
 
-**Alternatives considered**: .NET 8 LTS — viable but one generation behind; .NET 10 preview — too early for production.
+**Alternatives considered**: .NET 9 — the original choice, out of support within weeks of implementation starting; .NET 8 LTS — supported but two generations behind.
+
+**Frontend versions (revised 2026-10-17)**: React 19, Vite 8, TypeScript 6 (current `create-vite` template). React Router v7 instead of v6, because v6 has unpatched advisories (GHSA-wrjc-x8rr-h8h6, GHSA-337j-9hxr-rhxg); v7 declarative mode keeps the v6 `BrowserRouter`/`Routes` API. FluentAssertions is pinned to 7.x (Apache-2.0); 8.x requires a commercial license.
 
 ---
 
@@ -123,3 +125,5 @@ This layering supports future integration adapters (Phase 4) by allowing new `In
 **Rationale**: Since both frontend and backend run on localhost but on different ports, CORS must be configured. Restricting to the Vite origin prevents accidental cross-site access while keeping development frictionless.
 
 **Alternatives considered**: Wildcard CORS (`*`) — simpler but overly permissive even for localhost; Proxy through Vite dev server — eliminates CORS but adds config complexity.
+
+**API port (2026-10-17)**: The API listens on `http://localhost:5080`, not the Kestrel default 5000, because port 5000 is taken by an IIS site on the development machine. The frontend default (`VITE_API_BASE_URL`) and all docs use 5080.

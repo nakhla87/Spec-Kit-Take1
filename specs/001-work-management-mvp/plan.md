@@ -10,11 +10,11 @@ A single-user personal work management web application (modular monolith) consis
 
 ## Technical Context
 
-**Language/Version**: C# (.NET 9) — backend; TypeScript 5.x — frontend
+**Language/Version**: C# (.NET 10 LTS, SDK pinned in `backend/global.json`) — backend; TypeScript 6.x — frontend
 
 **Primary Dependencies**:
-- Backend: ASP.NET Core 9 Web API, Entity Framework Core 9, Microsoft.EntityFrameworkCore.SqlServer
-- Frontend: React 18, Vite 5, TypeScript, TanStack Query (React Query) v5, React Router v6
+- Backend: ASP.NET Core 10 Web API, Entity Framework Core 10, Microsoft.EntityFrameworkCore.SqlServer
+- Frontend: React 19, Vite 8, TypeScript 6, TanStack Query (React Query) v5, React Router v7 (declarative mode via `react-router-dom`)
 
 **Storage**: Microsoft SQL Server (local install), EF Core code-first migrations
 

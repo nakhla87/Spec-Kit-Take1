@@ -27,19 +27,19 @@
 
 **Purpose**: Scaffold both projects, configure tooling, and wire up cross-cutting configuration before any feature work begins.
 
-- [ ] T001 Create `backend/WorkManager.sln` and four .NET 9 class library / web API projects: `WorkManager.Api`, `WorkManager.Application`, `WorkManager.Domain`, `WorkManager.Infrastructure` with correct project references (Api → Application; Api → Infrastructure; Application → Domain; Infrastructure → Application)
-- [ ] T002 Create Vite + React + TypeScript frontend project in `frontend/` using `npm create vite@latest` with the `react-ts` template
-- [ ] T003 [P] Add NuGet packages to each backend project: `Microsoft.EntityFrameworkCore.SqlServer`, `Microsoft.EntityFrameworkCore.Tools` (Infrastructure); `Microsoft.AspNetCore.OpenApi` (Api); no third-party packages beyond EF Core and the test stack in T095
-- [ ] T004 [P] Install frontend npm packages: `react-router-dom`, `@tanstack/react-query`, `@tanstack/react-query-devtools` in `frontend/package.json`
-- [ ] T005 [P] Create `backend/src/WorkManager.Api/appsettings.json` (placeholder connection string; optional `App:TimeZoneId`, empty = machine local timezone, per FR-042) and `appsettings.Development.json.example` (documented real connection string format); add `appsettings.Development.json` to `.gitignore`
-- [ ] T006 [P] Configure CORS policy in `backend/src/WorkManager.Api/Program.cs` allowing `http://localhost:5173`; add JSON serialisation options (camelCase, ignore cycles)
-- [ ] T007 [P] Create `frontend/.env.example` with `VITE_API_BASE_URL=http://localhost:5000` and document usage; add `.env.local` to `frontend/.gitignore`
-- [ ] T008 [P] Configure global exception-handling middleware returning RFC 7807 ProblemDetails in `backend/src/WorkManager.Api/Program.cs`
-- [ ] T009 [P] Create `frontend/src/api/apiClient.ts` — a typed base fetch wrapper reading `VITE_API_BASE_URL` from env, handling JSON serialisation and throwing typed errors on non-2xx responses
-- [ ] T095 [P] Create test projects under `backend/tests/`: `WorkManager.Application.Tests`, `WorkManager.Api.Tests`, `WorkManager.Integration.Tests` (xUnit); add `FluentAssertions` and `Microsoft.AspNetCore.Mvc.Testing`; add them to `backend/WorkManager.sln`. Integration tests use a dedicated `WorkManager_Test` database on the local SQL Server, created via migrations in a shared fixture and reset between test classes. Unit tests use hand-written in-memory fake repositories and a fake `ILocalClock` (no mocking library)
-- [ ] T096 [P] Add Vitest + React Testing Library + jsdom to `frontend/`; configure the `test` block in `frontend/vite.config.ts` and an `npm run test` script in `frontend/package.json`
+- [X] T001 Create `backend/WorkManager.sln` and four .NET 10 class library / web API projects: `WorkManager.Api`, `WorkManager.Application`, `WorkManager.Domain`, `WorkManager.Infrastructure` with correct project references (Api → Application; Api → Infrastructure; Application → Domain; Infrastructure → Application)
+- [X] T002 Create Vite + React + TypeScript frontend project in `frontend/` using `npm create vite@latest` with the `react-ts` template
+- [X] T003 [P] Add NuGet packages to each backend project: `Microsoft.EntityFrameworkCore.SqlServer`, `Microsoft.EntityFrameworkCore.Tools` (Infrastructure); `Microsoft.AspNetCore.OpenApi` (Api); no third-party packages beyond EF Core and the test stack in T095
+- [X] T004 [P] Install frontend npm packages: `react-router-dom`, `@tanstack/react-query`, `@tanstack/react-query-devtools` in `frontend/package.json`
+- [X] T005 [P] Create `backend/src/WorkManager.Api/appsettings.json` (placeholder connection string; optional `App:TimeZoneId`, empty = machine local timezone, per FR-042) and `appsettings.Development.json.example` (documented real connection string format); add `appsettings.Development.json` to `.gitignore`
+- [X] T006 [P] Configure CORS policy in `backend/src/WorkManager.Api/Program.cs` allowing `http://localhost:5173`; add JSON serialisation options (camelCase, ignore cycles)
+- [X] T007 [P] Create `frontend/.env.example` with `VITE_API_BASE_URL=http://localhost:5080` and document usage; add `.env.local` to `frontend/.gitignore`
+- [X] T008 [P] Configure global exception-handling middleware returning RFC 7807 ProblemDetails in `backend/src/WorkManager.Api/Program.cs`
+- [X] T009 [P] Create `frontend/src/api/apiClient.ts` — a typed base fetch wrapper reading `VITE_API_BASE_URL` from env, handling JSON serialisation and throwing typed errors on non-2xx responses
+- [X] T095 [P] Create test projects under `backend/tests/`: `WorkManager.Application.Tests`, `WorkManager.Api.Tests`, `WorkManager.Integration.Tests` (xUnit); add `FluentAssertions` and `Microsoft.AspNetCore.Mvc.Testing`; add them to `backend/WorkManager.sln`. Integration tests use a dedicated `WorkManager_Test` database on the local SQL Server, created via migrations in a shared fixture and reset between test classes. Unit tests use hand-written in-memory fake repositories and a fake `ILocalClock` (no mocking library)
+- [X] T096 [P] Add Vitest + React Testing Library + jsdom to `frontend/`; configure the `test` block in `frontend/vite.config.ts` and an `npm run test` script in `frontend/package.json`
 
-**Checkpoint**: Both projects compile/start (empty). CORS preflight succeeds from `localhost:5173` to `localhost:5000`. `dotnet test` and `npm run test` run (zero tests) successfully.
+**Checkpoint**: Both projects compile/start (empty). CORS preflight succeeds from `localhost:5173` to `localhost:5080`. `dotnet test` and `npm run test` run (zero tests) successfully.
 
 ---
 
@@ -64,9 +64,9 @@
 - [ ] T021 [P] Create repository interfaces in `backend/src/WorkManager.Application/Interfaces/`: `IWorkItemRepository.cs`, `IPriorityRepository.cs`, `IStatusRepository.cs`, `IProjectRepository.cs`, `ICategoryRepository.cs`, `ITagRepository.cs`, `IActivityRepository.cs` — each with typed CRUD + query methods matching the contracts; `IStatusRepository` includes `GetBySystemKeyAsync(SystemStatus key)`
 - [ ] T022 Create repository implementations in `backend/src/WorkManager.Infrastructure/Repositories/`: `WorkItemRepository.cs`, `PriorityRepository.cs`, `StatusRepository.cs`, `ProjectRepository.cs`, `CategoryRepository.cs`, `TagRepository.cs`, `ActivityRepository.cs` — each implementing its interface using `WorkManagerDbContext`; no lazy loading (use explicit `.Include()`)
 - [ ] T108 Create `backend/src/WorkManager.Application/Interfaces/ILocalClock.cs` and `backend/src/WorkManager.Infrastructure/Time/LocalClock.cs` (built on .NET `TimeProvider`): `UtcNow`, `LocalNow`, `LocalToday`, `ToLocal(DateTime utc)`, `ToUtc(DateOnly date, TimeOnly? time)`; timezone from `App:TimeZoneId` (empty = machine local, FR-042). Services MUST NOT call `DateTime.UtcNow` / `DateTime.Today` directly
-- [ ] T023 Register `WorkManagerDbContext`, all repositories, `ILocalClock` (T108), and all application services in DI in `backend/src/WorkManager.Api/Program.cs`; configure SQL Server connection string from `appsettings`
+- [ ] T023 Register `WorkManagerDbContext`, all repositories, `ILocalClock` (T108), and all application services in DI in `backend/src/WorkManager.Api/Program.cs`; configure SQL Server connection string from `appsettings`; complete the T095 integration fixture (`backend/tests/WorkManager.Integration.Tests/Fixtures/WorkManagerApiFactory.cs`): apply migrations to `WorkManager_Test` once per run and reset data between test classes
 
-**Checkpoint**: `dotnet build` succeeds; `dotnet run` starts the API; `GET http://localhost:5000/api/priorities` returns the 6 seeded priorities.
+**Checkpoint**: `dotnet build` succeeds; `dotnet run` starts the API; `GET http://localhost:5080/api/priorities` returns the 6 seeded priorities.
 
 ---
 
